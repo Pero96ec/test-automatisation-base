@@ -44,11 +44,14 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
   @id:4 @crearPersonaje @creacionExitosa201
   Scenario: T-API-HU-1234-CA04-Crear personaje exitosamente 201 - karate
     * def jsonData = read('classpath:marvel_characters_api/request_create_character.json')
+    * def randomName = 'Hero_' + java.util.UUID.randomUUID().toString().substring(0, 8)
+    * set jsonData.name = randomName
     And request jsonData
     When method POST
     Then status 201
-    # And match response.id != null
-    # And match response.name == jsonData.name
+    And match response.id != null
+    And match response.name == jsonData.name
+    And match response.name == randomName
 
   ## Escenarios POST
 
