@@ -28,7 +28,8 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
 
   @id:2 @obtenerPersonajePorId @respuestaExitosa200
   Scenario: T-API-HU-1234-CA02-Obtener personaje por ID exitosamente 200 - karate
-    * def createdId = Math.floor(Math.random() * (1600 - 1500 + 1)) + 1500
+    #Se usa id randomico por el motivo que el metodo create no devuelve el ID
+    * def createdId = Math.floor(Math.random() * (2000 - 200 + 1)) + 200
     
     # Ahora obtengo el personaje creado asi evito que borren los id en el servicio y se caiga los test
     * path '/' + createdId
@@ -84,7 +85,7 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
     * def createData = read('classpath:marvel_characters_api/request_create_character.json')
     * def randomName = 'UpdateTest_' + java.util.UUID.randomUUID().toString().substring(0, 8)
     * set createData.name = randomName
-    * def createdId = Math.floor(Math.random() * (1600 - 1500 + 1)) + 1500
+    * def createdId = Math.floor(Math.random() * (2000 - 200 + 1)) + 200
     # Ahora actualizar el personaje creado
     * def jsonData = read('classpath:marvel_characters_api/request_update_character.json')
     * set jsonData.name = randomName + '_Updated'
@@ -94,6 +95,7 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
     Then status 200
     And match response.id != null
     And match response.description == jsonData.description
+    * def wasSuccessful = responseStatus == 200
 
   @id:8 @actualizarPersonaje @personajeNoExiste404
   Scenario: T-API-HU-1234-CA08-Actualizar personaje no existente 404 - karate
@@ -108,7 +110,7 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
 
   @id:9 @eliminarPersonaje @eliminacionExitosa200
   Scenario: T-API-HU-1234-CA09-Eliminar personaje exitosamente 200 - karate
-    * def createdId = Math.floor(Math.random() * (1400 - 1200 + 1)) + 1200
+    * def createdId = Math.floor(Math.random() * (2000 - 200 + 1)) + 200
     # Ahora eliminar el personaje creado
     * path '/' + createdId
     When method DELETE
