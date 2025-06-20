@@ -28,11 +28,18 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
 
   @id:2 @obtenerPersonajePorId @respuestaExitosa200
   Scenario: T-API-HU-1234-CA02-Obtener personaje por ID exitosamente 200 - karate
-    #Se usa id randomico por el motivo que el metodo create no devuelve el ID
-    * def createdId = Math.floor(Math.random() * (2000 - 200 + 1)) + 200
+    # Primero crear un personaje para obtener un ID válido
+    * def createData = read('classpath:marvel_characters_api/request_create_character.json')
+    * def randomName = 'Test_' + java.util.UUID.randomUUID().toString().substring(0, 8)
+    * set createData.name = randomName
+    And request createData
+    When method POST
+    Then status 201
+    And match response.id != null
+    * def createdId = response.id
     
     # Ahora obtengo el personaje creado asi evito que borren los id en el servicio y se caiga los test
-    * path '/' + createdId
+    * path '/testuser/api/characters/' + createdId
     When method GET
     Then status 200
     And match response.id != null
@@ -82,14 +89,19 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
 
   @id:7 @actualizarPersonaje @actualizacionExitosa200
   Scenario: T-API-HU-1234-CA07-Actualizar personaje exitosamente 200 - karate
+    # Primero crear un personaje para obtener un ID válido
     * def createData = read('classpath:marvel_characters_api/request_create_character.json')
     * def randomName = 'UpdateTest_' + java.util.UUID.randomUUID().toString().substring(0, 8)
     * set createData.name = randomName
-    * def createdId = Math.floor(Math.random() * (2000 - 200 + 1)) + 200
+    And request createData
+    When method POST
+    Then status 201
+    And match response.id != null
+    * def createdId = response.id
     # Ahora actualizar el personaje creado
     * def jsonData = read('classpath:marvel_characters_api/request_update_character.json')
     * set jsonData.name = randomName + '_Updated'
-    * path '/' + createdId
+    * path '/testuser/api/characters/' + createdId
     And request jsonData
     When method PUT
     Then status 200
@@ -110,9 +122,17 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
 
   @id:9 @eliminarPersonaje @eliminacionExitosa200
   Scenario: T-API-HU-1234-CA09-Eliminar personaje exitosamente 200 - karate
-    * def createdId = Math.floor(Math.random() * (2000 - 200 + 1)) + 200
+    # Primero crear un personaje para obtener un ID válido
+    * def createData = read('classpath:marvel_characters_api/request_create_character.json')
+    * def randomName = 'UpdateTest_' + java.util.UUID.randomUUID().toString().substring(0, 8)
+    * set createData.name = randomName
+    And request createData
+    When method POST
+    Then status 201
+    And match response.id != null
+    * def createdId = response.id
     # Ahora eliminar el personaje creado
-    * path '/' + createdId
+    * path '/testuser/api/characters/' + createdId
     When method DELETE
     Then status 204
 
