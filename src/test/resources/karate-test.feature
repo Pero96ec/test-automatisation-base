@@ -81,8 +81,10 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
 
   @id:7 @actualizarPersonaje @actualizacionExitosa200
   Scenario: T-API-HU-1234-CA07-Actualizar personaje exitosamente 200 - karate
-    * def createdId = Math.floor(Math.random() * (1600 - 1500 + 1)) + 1500
+    * def createData = read('classpath:marvel_characters_api/request_create_character.json')
     * def randomName = 'UpdateTest_' + java.util.UUID.randomUUID().toString().substring(0, 8)
+    * set createData.name = randomName
+    * def createdId = Math.floor(Math.random() * (1600 - 1500 + 1)) + 1500
     # Ahora actualizar el personaje creado
     * def jsonData = read('classpath:marvel_characters_api/request_update_character.json')
     * set jsonData.name = randomName + '_Updated'
