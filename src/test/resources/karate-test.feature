@@ -23,8 +23,7 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
   Scenario: T-API-HU-1234-CA01-Obtener todos los personajes exitosamente 200 - karate
     When method GET
     Then status 200
-    # And match response != null
-    # And match response.length >= 0
+    And match response != null
 
 
   @id:2 @obtenerPersonajePorId @respuestaExitosa200
@@ -32,16 +31,15 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
     * path '/33'
     When method GET
     Then status 200
-    # And match response.id != null
-    # And match response.name != null
+    And match response.id != null
+    And match response.name != null
 
   @id:3 @obtenerPersonajePorId @personajeNoExiste404
   Scenario: T-API-HU-1234-CA03-Obtener personaje por ID no existente 404 - karate
     * path '/999999'
     When method GET
     Then status 404
-    # And match response.message contains 'not found'
-    # And match response.status == 404
+    And match response.error contains 'not found'
 
   @id:4 @crearPersonaje @creacionExitosa201
   Scenario: T-API-HU-1234-CA04-Crear personaje exitosamente 201 - karate
@@ -59,7 +57,7 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
     * def jsonData = read('classpath:marvel_characters_api/request_duplicate_character.json')
     And request jsonData
     When method POST
-    Then status 409
+    Then status 400
     # And match response.message contains 'already exists'
     # And match response.status == 409
 
@@ -77,7 +75,7 @@ Feature: HU-1234 Gestión de personajes de Marvel (microservicio para administra
   @id:7 @actualizarPersonaje @actualizacionExitosa200
   Scenario: T-API-HU-1234-CA07-Actualizar personaje exitosamente 200 - karate
     * def jsonData = read('classpath:marvel_characters_api/request_update_character.json')
-    * path '/1'
+    * path '/33'
     And request jsonData
     When method PUT
     Then status 200
