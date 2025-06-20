@@ -1,0 +1,6 @@
+{
+  "name": "Test Character with Very Long Name That Exceeds Normal Limits",
+  "alterego": "Test Alter Ego",
+  "description": "Character created for testing purposes with edge case data",
+  "powers": ["Super Power 1", "Super Power 2", "Super Power 3"]
+}
